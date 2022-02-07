@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <!-- leaflet css -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+
+        <title></title>
+        <!-- <script src="india_state_geo.js"></script> -->
+       <script src="lines.js"></script>
+        <!-- <script src="marker.js"></script>-->
+        <script src="india.js"></script>   
+        <style>
+            #map {
+                width: 100%;
+                height: 100vh;
+            }
+            body {
+                margin: 0;
+                padding: 0%;
+            }
+            .leaflet-control {
+                font-weight: 400;
+                font-size: 20px;
+            }
+        </style>
+    </head>
+    <body>
+    <div id ="map"></div>
+    <div id="coordinate" class="leaflet-control"></div>
+    </body>
+    <!-- leaflet js -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script>
+     // map initialization
+    var map = L.map('map').setView([28.7041, 77.1025], 5);
+
+    //base maps
+    var osm= L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+});
+    osm.addTo(map)
+
+    googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+    maxZoom: 20,
+    subdomains:['mt0','mt1','mt2','mt3']
+});
+googleSat.addTo(map)
+
+var Google =   L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+    maxZoom: 20,
+    subdomains:['mt0','mt1','mt2','mt3']
+});
+Google.addTo(map)
+
+//marker
+var single_marker = L.marker([28.7041, 77.1025])
+var popup = single_marker.bindPopup('New Delhi  ' + single_marker.getLatLng())
+    .openPopup();
+    popup.addTo(map);
+
+// overlay_map
+var baseMaps = {
+    "osm": osm,
+    "Google": Google,
+    "googleSat": googleSat,
+};
+
+var overlayMaps = {
+    "marker": single_marker
+};
+L.control.layers(baseMaps, overlayMaps, {collapsed :false }).addTo(map).openPopup();
+    </script>
+    <script>
+        
+        //  L.geoJSON(statejson).addTo(map)
+         L.geoJSON(linejson).addTo(map)
+        // L.geoJSON(markerjson).addTo(map)
+        //  L.geoJSON(indiajson, {
+        //      onEachFeature: function (feature, layer) {
+        //          layer.bindPopup()
+        //      }
+        //  }).addTo(map)
+        // L.geoJSON(test).addTo(map)
+
+    //mouseover 
+    map.on('mouseover', function () 
+    {
+        console.log('your mouse is over the map')
+    })
+    //mousemove
+    map.on('mousemove', function (co) {
+        document.getElementById('coordinate').innerHTML = 'lat: ' + co.latlng.lat, 'lng: ' + co.latlng.lng;
+        document.getElementsByClassName('leaflet-control')[0].innerHTML = 'lat: ' + co.latlng.lat + 'lng: ' + co.latlng.lng;
+        console.log('lat: ' + co.latlng.lat, 'lng: ' + co.latlng.lng)
+    })
+
+    </script>
+</html>
