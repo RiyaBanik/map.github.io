@@ -65,7 +65,8 @@ var baseMaps = {
 };
 
 var overlayMaps = {
-    "marker": single_marker
+    "marker": single_marker,
+    "googleSat": googleSat,
 };
 L.control.layers(baseMaps, overlayMaps, {collapsed :false }).addTo(map).openPopup();
     </script>
